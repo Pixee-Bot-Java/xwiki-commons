@@ -19,6 +19,7 @@
  */
 package org.xwiki.component.annotation;
 
+import io.github.pixee.security.ZipSecurity;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -542,7 +543,7 @@ public class ComponentAnnotationLoader
      */
     public List<ComponentDeclaration> getDeclaredComponentsFromJAR(InputStream jarFile) throws IOException
     {
-        ZipInputStream zis = new ZipInputStream(jarFile);
+        ZipInputStream zis = ZipSecurity.createHardenedInputStream(jarFile);
 
         List<ComponentDeclaration> componentDeclarations = null;
         List<ComponentDeclaration> componentOverrideDeclarations = null;
