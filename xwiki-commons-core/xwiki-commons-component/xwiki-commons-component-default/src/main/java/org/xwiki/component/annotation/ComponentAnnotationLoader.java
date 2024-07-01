@@ -19,6 +19,7 @@
  */
 package org.xwiki.component.annotation;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -510,7 +511,7 @@ public class ComponentAnnotationLoader
         // generated on an 8-bit system.
         BufferedReader in = new BufferedReader(new InputStreamReader(componentListStream, COMPONENT_LIST_ENCODING));
         String inputLine;
-        while ((inputLine = in.readLine()) != null) {
+        while ((inputLine = BoundedLineReader.readLine(in, 5_000_000)) != null) {
             // Make sure we don't add empty lines
             if (inputLine.trim().length() > 0) {
                 try {

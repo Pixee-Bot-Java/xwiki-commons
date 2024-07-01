@@ -19,6 +19,7 @@
  */
 package org.xwiki.classloader.internal;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -718,14 +719,14 @@ public class ResourceLoader
 
         // skip version-info
         do {
-            line = reader.readLine();
+            line = BoundedLineReader.readLine(reader, 5_000_000);
         } while (line != null && line.trim().length() > 0);
 
         URL currentURL;
         List<String> currentList = null;
         while (true) {
             // skip the blank line
-            line = reader.readLine();
+            line = BoundedLineReader.readLine(reader, 5_000_000);
             if (line == null) {
                 return result;
             }
@@ -735,7 +736,7 @@ public class ResourceLoader
             result.put(currentURL, currentList);
 
             while (true) {
-                line = reader.readLine();
+                line = BoundedLineReader.readLine(reader, 5_000_000);
                 if (line == null || line.trim().length() == 0) {
                     break;
                 }
