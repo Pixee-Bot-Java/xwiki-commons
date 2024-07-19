@@ -19,6 +19,7 @@
  */
 package org.xwiki.logging.internal.tail;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.DataOutput;
 import java.io.File;
@@ -242,7 +243,7 @@ public abstract class AbstractFileLoggerTail extends AbstractLoggerTail implemen
 
         try (BufferedReader reader = new BufferedReader(new FileReader(this.indexFile))) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 int i = line.indexOf(':');
 
                 this.index

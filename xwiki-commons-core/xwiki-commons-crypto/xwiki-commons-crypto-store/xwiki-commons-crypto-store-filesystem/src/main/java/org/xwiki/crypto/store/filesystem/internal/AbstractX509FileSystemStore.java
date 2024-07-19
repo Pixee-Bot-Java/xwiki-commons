@@ -20,6 +20,7 @@
 
 package org.xwiki.crypto.store.filesystem.internal;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -209,7 +210,7 @@ public abstract class AbstractX509FileSystemStore
         String line;
         Object obj = null;
 
-        while ((line = in.readLine()) != null) {
+        while ((line = BoundedLineReader.readLine(in, 5_000_000)) != null) {
             obj = processObject(in, line, password);
             if (obj != null) {
                 break;
@@ -251,7 +252,7 @@ public abstract class AbstractX509FileSystemStore
         String line;
         StringBuilder buf = new StringBuilder();
 
-        while ((line = in.readLine()) != null) {
+        while ((line = BoundedLineReader.readLine(in, 5_000_000)) != null) {
             if (line.contains(endMarker)) {
                 break;
             }
