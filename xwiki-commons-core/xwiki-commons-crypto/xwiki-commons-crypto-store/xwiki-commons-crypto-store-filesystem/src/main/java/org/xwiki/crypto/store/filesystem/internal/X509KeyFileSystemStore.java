@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.security.GeneralSecurityException;
 
 import javax.inject.Inject;
@@ -107,10 +108,10 @@ public class X509KeyFileSystemStore extends AbstractX509FileSystemStore implemen
                 File keyfile = new File(file, filename + KEY_FILE_EXTENSION);
                 File certfile = new File(file, filename + CERTIFICATE_FILE_EXTENSION);
 
-                store(new BufferedWriter(new FileWriter(keyfile)), type, privateKey);
+                store(Files.newBufferedWriter(keyfile.toPath()), type, privateKey);
 
                 byte[] encodedCertificate = certificate.getEncoded();
-                store(new BufferedWriter(new FileWriter(certfile)), CERTIFICATE, encodedCertificate);
+                store(Files.newBufferedWriter(certfile.toPath()), CERTIFICATE, encodedCertificate);
             } else {
                 if (!file.exists()) {
                     if (!file.createNewFile()) {
@@ -118,7 +119,7 @@ public class X509KeyFileSystemStore extends AbstractX509FileSystemStore implemen
                     }
                 }
 
-                BufferedWriter out = new BufferedWriter(new FileWriter(file));
+                BufferedWriter out = Files.newBufferedWriter(file.toPath());
                 write(out, type, privateKey);
                 store(out, CERTIFICATE, certificate.getEncoded());
             }
