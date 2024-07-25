@@ -19,6 +19,8 @@
  */
 package org.xwiki.extension.repository.internal.core;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -264,7 +266,7 @@ public class DefaultCoreExtensionScanner implements CoreExtensionScanner, Dispos
                 // Find XED file URL
                 URL xedURL;
                 try {
-                    xedURL = new URL(jarString.substring(0, extIndex) + ".xed");
+                    xedURL = Urls.create(jarString.substring(0, extIndex) + ".xed", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 } catch (MalformedURLException e) {
                     // Cannot really happen
                     return null;
@@ -371,6 +373,6 @@ public class DefaultCoreExtensionScanner implements CoreExtensionScanner, Dispos
         List<String> segments = Arrays.asList(xedURL.toString().split(separator));
         // Remove the segments corresponding to "/META-INF/extension.xed" at the end of the URL.
         List<String> startSegments = segments.subList(0, segments.size() - 2);
-        return new URL(String.join(separator, startSegments));
+        return Urls.create(String.join(separator, startSegments), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     }
 }

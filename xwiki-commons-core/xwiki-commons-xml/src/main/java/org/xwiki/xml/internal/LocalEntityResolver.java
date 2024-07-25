@@ -28,6 +28,8 @@
  */
 package org.xwiki.xml.internal;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -531,10 +533,10 @@ public class LocalEntityResolver implements EntityResolver2
         } else if (systemId != null) {
             URL enturl;
             if (baseURI != null) {
-                URL base = new URL(baseURI);
-                enturl = new URL(base, systemId);
+                URL base = Urls.create(baseURI, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
+                enturl = Urls.create(base, systemId, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             } else {
-                enturl = new URL(systemId);
+                enturl = Urls.create(systemId, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             }
             if (isInvalidProtocol(enturl.getProtocol())) {
                 throw new SAXException("Invalid url protocol: " + enturl.getProtocol());

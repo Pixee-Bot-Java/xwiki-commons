@@ -19,6 +19,8 @@
  */
 package org.xwiki.classloader.internal;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -184,7 +186,7 @@ public class ExtendedJarURLConnection extends JarURLConnection
         }
 
         // This is the main difference with standard JarURLConnection: we use a component to handle the actual file
-        this.jarFileURL = new URL(null, spec.substring(0, separator++), this.handler);
+        this.jarFileURL = Urls.create(null, spec.substring(0, separator++), this.handler, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         this.entryName = null;
 
         /* if ! is the last letter of the innerURL, entryName is null */

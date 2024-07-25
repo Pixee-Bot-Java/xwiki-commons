@@ -19,6 +19,8 @@
  */
 package org.xwiki.crypto.pkix.params.x509certificate.extension;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,7 +62,7 @@ public class X509URI implements X509StringGeneralName, BcGeneralName
             newUri = newUrl.toURI();
         } catch (URISyntaxException e) {
             try {
-                newUrl = new URL(str);
+                newUrl = Urls.create(str, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 newStr = newUrl.toString();
             } catch (MalformedURLException e1) {
                 newStr = str;

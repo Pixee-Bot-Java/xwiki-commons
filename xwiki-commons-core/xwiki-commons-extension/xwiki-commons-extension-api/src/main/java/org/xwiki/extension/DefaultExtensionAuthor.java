@@ -19,6 +19,8 @@
  */
 package org.xwiki.extension;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
@@ -79,7 +81,7 @@ public class DefaultExtensionAuthor implements ExtensionAuthor
     {
         if (this.urlCache == null && this.url != null) {
             try {
-                this.urlCache = new URL(this.url);
+                this.urlCache = Urls.create(this.url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             } catch (MalformedURLException e) {
                 // TODO: Should probably log something
             }

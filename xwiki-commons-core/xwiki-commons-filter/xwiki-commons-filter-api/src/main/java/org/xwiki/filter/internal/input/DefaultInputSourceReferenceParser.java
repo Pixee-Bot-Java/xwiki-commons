@@ -19,6 +19,8 @@
  */
 package org.xwiki.filter.internal.input;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.net.URL;
 
@@ -68,7 +70,7 @@ public class DefaultInputSourceReferenceParser implements InputSourceReferencePa
 
             if (prefix.equals("url")) {
                 try {
-                    inputSource = new DefaultURLInputSource(new URL(value));
+                    inputSource = new DefaultURLInputSource(Urls.create(value, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
                 } catch (Exception e) {
                     throw new ConversionException("Failed to create input source for URL [" + reference + "]", e);
                 }

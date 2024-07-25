@@ -19,6 +19,8 @@
  */
 package org.xwiki.extension.repository.internal;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.net.URL;
 
 import org.w3c.dom.Element;
@@ -42,7 +44,7 @@ public class URLExtensionPropertySerializer extends AbstractExtensionPropertySer
     public URL toValue(Element element)
     {
         try {
-            return new URL(element.getTextContent());
+            return Urls.create(element.getTextContent(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (Exception e) {
             // TODO: should maybe log something
             return null;
