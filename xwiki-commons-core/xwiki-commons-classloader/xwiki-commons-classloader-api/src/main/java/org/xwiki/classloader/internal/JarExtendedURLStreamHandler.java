@@ -20,6 +20,8 @@
 // In java.net package to be allowed to call URLStreamHandler methods
 package org.xwiki.classloader.internal;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -108,7 +110,7 @@ public class JarExtendedURLStreamHandler extends URLStreamHandler
         }
 
         // For anything else use standard JAR handler
-        return new URL(null, spec).openConnection();
+        return Urls.create(null, spec, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).openConnection();
     }
 
     @Override
@@ -223,7 +225,7 @@ public class JarExtendedURLStreamHandler extends URLStreamHandler
         // test the inner URL
         try {
             String innerSpec = spec.substring(0, index - 1);
-            new URL(innerSpec);
+            Urls.create(innerSpec, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (MalformedURLException e) {
             throw new NullPointerException("invalid url: " +
                                            spec + " (" + e + ")");

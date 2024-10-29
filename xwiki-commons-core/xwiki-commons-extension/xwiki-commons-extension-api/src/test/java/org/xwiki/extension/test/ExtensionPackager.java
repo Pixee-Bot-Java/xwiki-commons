@@ -19,6 +19,8 @@
  */
 package org.xwiki.extension.test;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -171,7 +173,7 @@ public class ExtensionPackager
             try {
                 // Order files
                 TreeMap<String, Vfs.File> files = new TreeMap<>();
-                for (Vfs.File resourceFile : Vfs.fromURL(new URL(descriptorFolderURL)).getFiles()) {
+                for (Vfs.File resourceFile : Vfs.fromURL(Urls.create(descriptorFolderURL, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS)).getFiles()) {
                     files.put(resourceFile.getRelativePath(), resourceFile);
                 }
 

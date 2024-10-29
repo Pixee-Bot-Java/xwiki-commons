@@ -20,6 +20,8 @@
 package org.xwiki.classloader.internal;
 
 import io.github.pixee.security.BoundedLineReader;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -188,7 +190,7 @@ public class ResourceLoader
             try {
                 // escape spaces etc. to make sure url is well-formed
                 URI relUri = new URI(null, null, null, -1, name, null, null);
-                url = new URL(source, relUri.getRawPath());
+                url = Urls.create(source, relUri.getRawPath(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             } catch (URISyntaxException e) {
                 throw new IllegalArgumentException("Illegal resource name: " + name);
             } catch (MalformedURLException e) {
@@ -338,7 +340,7 @@ public class ResourceLoader
         if (isDir(source)) {
             // plain resource
             try {
-                url = new URL(source, name);
+                url = Urls.create(source, name, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             } catch (MalformedURLException e) {
                 return null;
             }
@@ -419,7 +421,7 @@ public class ResourceLoader
             try {
                 // escape spaces etc. to make sure url is well-formed
                 URI relUri = new URI(null, null, null, -1, name, null, null);
-                url = new URL(this.base, relUri.getRawPath());
+                url = Urls.create(this.base, relUri.getRawPath(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             } catch (URISyntaxException e) {
                 throw new IllegalArgumentException("Illegal resource name: " + name);
             } catch (MalformedURLException e) {
@@ -731,7 +733,7 @@ public class ResourceLoader
                 return result;
             }
 
-            currentURL = new URL(cxt, line);
+            currentURL = Urls.create(cxt, line, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             currentList = new ArrayList<>();
             result.put(currentURL, currentList);
 
@@ -773,7 +775,7 @@ public class ResourceLoader
                     cpList.add(uri.toURL());
                 } catch (URISyntaxException e) {
                     // tolerate malformed URIs for backward-compatibility
-                    URL url = new URL(source, token);
+                    URL url = Urls.create(source, token, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                     cpList.add(url);
                 }
             } catch (MalformedURLException e) {
