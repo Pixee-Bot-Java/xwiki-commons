@@ -73,7 +73,7 @@ public class JobStatusSerializer
      */
     public void write(JobStatus status, File file) throws IOException
     {
-        File tempFile = File.createTempFile(file.getName(), ".tmp");
+        File tempFile = Files.createTempFile(file.getName(), ".tmp").toFile();
 
         try (OutputStream stream = getOutputStream(tempFile, isZip(file))) {
             if (stream instanceof ArchiveOutputStream) {

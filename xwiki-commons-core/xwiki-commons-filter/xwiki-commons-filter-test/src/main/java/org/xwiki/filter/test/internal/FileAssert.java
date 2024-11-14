@@ -21,6 +21,7 @@ package org.xwiki.filter.test.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,7 +86,7 @@ public final class FileAssert
      */
     public static void assertEquals(File expected, byte[] actual) throws IOException
     {
-        File actualFile = File.createTempFile(expected.getName(), ".actual");
+        File actualFile = Files.createTempFile(expected.getName(), ".actual").toFile();
 
         try {
             FileUtils.writeByteArrayToFile(actualFile, actual);

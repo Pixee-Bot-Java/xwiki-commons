@@ -30,6 +30,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLDecoder;
 import java.net.URLStreamHandler;
+import java.nio.file.Files;
 import java.security.Permission;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -89,7 +90,7 @@ public class ExtendedJarURLConnection extends JarURLConnection
         this.jarsDirectory.mkdirs();
 
         // Download the data in a temporary local file
-        File tempFile = File.createTempFile("jar", ".jar", this.jarsDirectory);
+        File tempFile = Files.createTempFile(this.jarsDirectory.toPath(), "jar", ".jar").toFile();
         try (InputStream stream = this.jarFileURL.openStream()) {
             FileUtils.copyInputStreamToFile(stream, tempFile);
         }
