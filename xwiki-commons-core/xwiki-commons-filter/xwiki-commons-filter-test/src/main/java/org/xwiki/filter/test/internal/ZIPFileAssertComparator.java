@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,12 +118,12 @@ public class ZIPFileAssertComparator implements FileAssertComparator
     @Override
     public void assertEquals(String message, byte[] expected, byte[] actual) throws IOException
     {
-        File actualFile = File.createTempFile("actual", ".actual");
+        File actualFile = Files.createTempFile("actual", ".actual").toFile();
 
         try {
             FileUtils.writeByteArrayToFile(actualFile, actual);
 
-            File expectedFile = File.createTempFile("expected", ".expected");
+            File expectedFile = Files.createTempFile("expected", ".expected").toFile();
 
             try {
                 FileUtils.writeByteArrayToFile(expectedFile, expected);
