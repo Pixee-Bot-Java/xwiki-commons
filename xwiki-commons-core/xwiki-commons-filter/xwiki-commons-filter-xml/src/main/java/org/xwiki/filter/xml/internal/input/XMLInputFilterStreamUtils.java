@@ -19,6 +19,7 @@
  */
 package org.xwiki.filter.xml.internal.input;
 
+import static io.github.pixee.security.XMLInputFactorySecurity.hardenFactory;
 import java.io.IOException;
 
 import javax.xml.stream.XMLEventReader;
@@ -40,7 +41,7 @@ import org.xwiki.xml.stax.StAXUtils;
  */
 public final class XMLInputFilterStreamUtils
 {
-    private static final XMLInputFactory XML_INPUT_FACTORY = XMLInputFactory.newInstance();
+    private static final XMLInputFactory XML_INPUT_FACTORY = hardenFactory(XMLInputFactory.newInstance());
 
     /**
      * @since 9.5.2
