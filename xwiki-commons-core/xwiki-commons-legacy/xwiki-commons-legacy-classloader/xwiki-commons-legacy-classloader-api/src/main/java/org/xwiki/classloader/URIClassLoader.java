@@ -19,6 +19,8 @@
  */
 package org.xwiki.classloader;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -419,8 +421,7 @@ public class URIClassLoader extends ExtendedURLClassLoader
                     new ResourceLoader(handlerFactory != null ? handlerFactory.createURLStreamHandler("jar") : null);
                 URL[] urls = new URL[uris.length];
                 for (int i = 0; i < uris.length; i++) {
-                    urls[i] = new URL(null, uris[i].toString(),
-                        handlerFactory != null ? handlerFactory.createURLStreamHandler(uris[i].getScheme()) : null);
+                    urls[i] = Urls.create(null, uris[i].toString(), handlerFactory != null ? handlerFactory.createURLStreamHandler(uris[i].getScheme()) : null, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 }
                 this.urls = urls;
             } catch (MalformedURLException e) {
@@ -431,8 +432,8 @@ public class URIClassLoader extends ExtendedURLClassLoader
         public synchronized void addURI(URI uri)
         {
             try {
-                URL url = new URL(null, uri.toString(), this.handlerFactory != null ? this.handlerFactory
-                    .createURLStreamHandler(uri.getScheme()) : null);
+                URL url = Urls.create(null, uri.toString(), this.handlerFactory != null ? this.handlerFactory
+                    .createURLStreamHandler(uri.getScheme()) : null, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 int len = this.urls.length;
                 URL[] urls = new URL[len + 1];
                 System.arraycopy(this.urls, 0, urls, 0, len);

@@ -19,6 +19,8 @@
  */
 package org.xwiki.extension.repository.maven.internal;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -168,10 +170,10 @@ public class MavenExtensionScanner extends AbstractExtensionScanner
             try {
                 if (path.endsWith("/")) {
                     // It's a folder
-                    descriptorURL = new URL(path + descriptor);
+                    descriptorURL = Urls.create(path + descriptor, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 } else {
                     // Probably a jar
-                    descriptorURL = new URL("jar:" + jarURL.toExternalForm() + "!/" + descriptor);
+                    descriptorURL = Urls.create("jar:" + jarURL.toExternalForm() + "!/" + descriptor, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 }
             } catch (MalformedURLException e) {
                 // Not supposed to happen (would mean there is a bug in Reflections)
