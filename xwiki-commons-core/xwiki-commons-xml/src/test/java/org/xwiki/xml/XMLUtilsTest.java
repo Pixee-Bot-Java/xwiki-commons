@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -355,7 +356,7 @@ class XMLUtilsTest
     void parseWhenXXEFileAttack()
         throws ClassNotFoundException, InstantiationException, IllegalAccessException, ClassCastException, IOException
     {
-        File tempFile = File.createTempFile("file", ".txt");
+        File tempFile = Files.createTempFile("file", ".txt").toFile();
 
         FileUtils.write(tempFile, "external", StandardCharsets.UTF_8);
 
