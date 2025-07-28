@@ -19,6 +19,7 @@
  */
 package org.xwiki.filter.test.integration;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,7 +98,7 @@ public class TestDataParser
             StringBuilder buffer = new StringBuilder();
             Map<String, String> configuration = data.configuration;
 
-            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+            for (String line = BoundedLineReader.readLine(reader, 5_000_000); line != null; line = BoundedLineReader.readLine(reader, 5_000_000)) {
                 if (line.startsWith(".")) {
                     if (line.startsWith(".#")) {
                         // Ignore comments and print it to the stdout if it's a todo.
