@@ -19,6 +19,8 @@
  */
 package org.xwiki.extension.internal;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.JarURLConnection;
@@ -71,7 +73,7 @@ public final class PathUtils
             jarURLString = jarURLString.replace(" ", "%20");
 
             try {
-                return new URL(jarURLString);
+                return Urls.create(jarURLString, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             } catch (MalformedURLException e) {
                 // TODO: Log something ?
             }
